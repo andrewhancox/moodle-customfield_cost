@@ -53,15 +53,15 @@ class data_controller extends \core_customfield\data_controller {
         $currencyelement = $mform->createElement('select', "{$elementname}_currency", get_string('currency', 'customfield_cost'), $options);
         $costelement = $mform->createElement('float', "{$elementname}_amount", get_string('amount', 'customfield_cost'), array('size' => '10'));
         $mform->addGroup([
-            $currencyelement,
-            $costelement
+            $costelement,
+            $currencyelement
         ], $elementname, $this->get_field()->get_formatted_name());
         $mform->setType("{$elementname}_currency", PARAM_TEXT);
         $mform->setType("{$elementname}_amount", PARAM_FLOAT);
 
         if ($field->get_configdata_property('required')) {
-         //   $mform->addRule("{$elementname}_currency", null, 'required', null, 'client');
-      //      $mform->addRule("{$elementname}_amount", null, 'required', null, 'client');
+            $mform->addRule("{$elementname}_currency", null, 'required', null, 'client');
+            $mform->addRule("{$elementname}_amount", null, 'required', null, 'client');
         }
     }
 
@@ -84,9 +84,9 @@ class data_controller extends \core_customfield\data_controller {
         if (
             !property_exists($datanew, $elementname)
             ||
-            !isset($datanew->{$elementname}["{$elementname}_currency"])
+            empty($datanew->{$elementname}["{$elementname}_currency"])
             ||
-            !isset($datanew->{$elementname}["{$elementname}_amount"])
+            empty($datanew->{$elementname}["{$elementname}_amount"])
         ) {
             return;
         }
@@ -119,12 +119,12 @@ class data_controller extends \core_customfield\data_controller {
         $param = $mform->getElement("{$elementname}");
 
         if (!empty($this->get('shortcharvalue'))) {
-            $param->_elements[0]->setValue($this->get('shortcharvalue'));
+            $param->_elements[1]->setValue($this->get('shortcharvalue'));
         }
 
 
         if (!empty($this->get('decvalue'))) {
-            $param->_elements[1]->setValue(number_format($this->get('decvalue'), 2));
+            $param->_elements[0]->setValue(number_format($this->get('decvalue'), 2));
         }
 
         parent::instance_form_definition_after_data($mform);
